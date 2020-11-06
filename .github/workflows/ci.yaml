@@ -1,0 +1,19 @@
+name: CI
+on: [pull_request]
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: git rev-parse
+        run: |
+          echo Resolves to $(git rev-parse $GITHUB_SHA^2) > test
+          git log $GITHUB_SHA >> test
+          env >> test
+      - name: archive test
+        uses: actions/upload-artifact@v2
+        with:
+          name: test
+          path: test
